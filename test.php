@@ -1,3 +1,3 @@
 <?php
-echo "Fuck the world";
+echo "Fuck the wo rld";
 ?>
