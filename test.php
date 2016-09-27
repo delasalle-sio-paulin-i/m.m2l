@@ -1,3 +1,3 @@
 <?php
-echo "F Society";
+echo" test";
 ?>
