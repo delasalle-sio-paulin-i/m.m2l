@@ -306,9 +306,6 @@ class DAO
 			return "1";
 	}
 	
-<<<<<<< HEAD
-<<<<<<< HEAD
-	
 	public function supprimerUtilisateur($name) {
 	
 		$txt_req = "Delete From mrbs_users  Where name=:name  ";
@@ -319,15 +316,8 @@ class DAO
 		$ok = $req->execute();
 		return $ok;
 	}
-}
 
 
-
-
-// fin de la classe DAO
-=======
-=======
->>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
 	public function aPasseDesReservations($nomUser)
 	{
 		include_once ('DAO.class.php');
@@ -364,7 +354,6 @@ class DAO
 	
 	
 } // fin de la classe DAO
->>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
 
 // ATTENTION : on ne met pas de balise de fin de script pour ne pas prendre le risque
 // d'enregistrer d'espaces après la balise de fin de script !!!!!!!!!!!!
