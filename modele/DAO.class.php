@@ -353,6 +353,32 @@ class DAO
 	}
 	
 	
+public function getLesSalles()
+	{	// préparation de la requete de recherche
+		$txt_req = "Select * from mrbs_room";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		
+		$req->execute();
+		$uneLigne = $req->fetch(PDO::FETCH_OBJ);
+		// construction d'une collection d'objets Reservation
+		$lesSalles = array();
+		// tant qu'une ligne est trouvée :
+		while ($uneLigne)
+		{	// création d'un objet Reservation
+			
+			$nom = utf8_encode($uneLigne->room_name);
+				
+			// extrait la ligne suivante
+			$uneLigne = $req->fetch(PDO::FETCH_OBJ);
+		}
+		// libère les ressources du jeu de données
+		$req->closeCursor();
+		// fourniture de la collection
+		return $lesSalles;
+	}
+
+	
 } // fin de la classe DAO
 
 // ATTENTION : on ne met pas de balise de fin de script pour ne pas prendre le risque
