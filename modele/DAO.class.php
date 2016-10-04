@@ -306,6 +306,23 @@ class DAO
 			return "1";
 	}
 	
+	// modifier le mot de passe de l'utilisateur
+	public function modifierMdpUser($unUtilisateur)
+	{	// préparation de la requete
+	$txt_req = "UPDATE client";
+	$req = $this->cnx->prepare($txt_req);
+	// liaison de la requête et de ses paramètres
+	$req->bindValue("level", utf8_decode($unUtilisateur->getLevel()), PDO::PARAM_STR);
+	$req->bindValue("name", utf8_decode($unUtilisateur->getName()), PDO::PARAM_STR);
+	$req->bindValue("password", utf8_decode(md5($unUtilisateur->getPassword())), PDO::PARAM_STR);
+	$req->bindValue("email", utf8_decode($unUtilisateur->getEmail()), PDO::PARAM_STR);
+	// exécution de la requete
+	$ok = $req->execute();
+	return $ok;
+	
+	
+	
+	// Fonction qui va supprimer l'utilisateur
 	public function supprimerUtilisateur($name) {
 	
 		$txt_req = "Delete From mrbs_users  Where name=:name  ";
