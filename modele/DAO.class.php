@@ -307,6 +307,7 @@ class DAO
 	}
 	
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 	public function supprimerUtilisateur($name) {
 	
@@ -325,6 +326,8 @@ class DAO
 
 // fin de la classe DAO
 =======
+=======
+>>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
 	public function aPasseDesReservations($nomUser)
 	{
 		include_once ('DAO.class.php');
