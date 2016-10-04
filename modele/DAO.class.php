@@ -320,13 +320,32 @@ class DAO
 
 	public function aPasseDesReservations($nomUser)
 	{
-		include_once ('DAO.class.php');
-		$dao = new DAO();
-		$testResa= $dao->getLesReservations($nomUser);
-		if ($testResa== !null)
-			return TRUE;
-		else 
-			return FALSE;
+// 		include_once ('DAO.class.php');
+// 		$dao = new DAO();
+// 		$testResa= $dao->getLesReservations($nomUser);
+// 		if ($testResa== !null)
+// 			return TRUE;
+// 		else 
+// 			return FALSE;
+
+		// préparation de la requete de recherche
+		$txt_req = "Select *";
+		$txt_req = $txt_req . " from mrbs_entry";
+		$txt_req = $txt_req . " where  create_by = :nomUser";
+// 		$txt_req = $txt_req . " and start_time > :time";
+		
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("nomUser", $nomUser, PDO::PARAM_STR);
+// 		$req->bindValue("time", time(), PDO::PARAM_INT);
+		// extraction des données
+		$req->execute();
+		$uneLigne = $req->fetch(PDO::FETCH_OBJ);
+		if ($uneLigne== null)
+ 			return FALSE;
+ 		else
+ 			return TRUE;
+		
 	}
 	
 	public function getReservation($idReservation)
@@ -352,7 +371,29 @@ class DAO
 		return $uneReservation;
 	}
 	
+	// annuler reservation
 	
+	public function annulerReservation($idReservation){
+		$txt_req = "Delete From mrbs_entry  Where id=:idRes  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("idRes", utf8_decode($idReservation), PDO::PARAM_STR);
+		// exécution de la requete
+		$ok = $req->execute();
+		return $ok;
+	}
+	
+	// Confirmer reservation
+	
+	public function confirmerReservation($idReservation){
+		$txt_req = "Update From mrbs_entry Set status = '1'  Where id=:idRes  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("idRes", utf8_decode($idReservation), PDO::PARAM_STR);
+		// exécution de la requete
+		$ok = $req->execute();
+		return $ok;
+	}
 } // fin de la classe DAO
 
 // ATTENTION : on ne met pas de balise de fin de script pour ne pas prendre le risque
