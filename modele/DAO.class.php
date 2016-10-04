@@ -306,6 +306,18 @@ class DAO
 			return "1";
 	}
 	
+	public function supprimerUtilisateur($name) {
+	
+		$txt_req = "Delete From mrbs_users  Where name=:name  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("name", utf8_decode($name), PDO::PARAM_STR);
+		// exécution de la requete
+		$ok = $req->execute();
+		return $ok;
+	}
+
+
 	public function aPasseDesReservations($nomUser)
 	{
 		include_once ('DAO.class.php');
