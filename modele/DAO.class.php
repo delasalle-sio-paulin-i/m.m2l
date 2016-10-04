@@ -306,6 +306,7 @@ class DAO
 			return "1";
 	}
 	
+<<<<<<< HEAD
 	
 	public function supprimerUtilisateur($name) {
 	
@@ -323,6 +324,44 @@ class DAO
 
 
 // fin de la classe DAO
+=======
+	public function aPasseDesReservations($nomUser)
+	{
+		include_once ('DAO.class.php');
+		$dao = new DAO();
+		$testResa= $dao->getLesReservations($nomUser);
+		if ($testResa== !null)
+			return TRUE;
+		else 
+			return FALSE;
+	}
+	
+	public function getReservation($idReservation)
+	{	// préparation de la requête de recherche
+		$txt_req = "Select * from mrbs_entry where id = :id ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("id", $idReservation, PDO::PARAM_STR);
+		// extraction des données
+		$req->execute();
+		$uneLigne = $req->fetch(PDO::FETCH_OBJ);
+		// traitement de la réponse
+		$unId = utf8_encode($uneLigne->id_entry);
+		$unTimeStamp = utf8_encode($uneLigne->timestamp);
+		$unStartTime = utf8_encode($uneLigne->start_time);
+		$unEndTime = utf8_encode($uneLigne->end_time);
+		$unRoomName = utf8_encode($uneLigne->room_name);
+		$unStatus = utf8_encode($uneLigne->status);
+		$unDigicode = utf8_encode($uneLigne->digicode);
+		
+		$uneReservation = new Reservation($unId, $unTimeStamp, $unStartTime, $unEndTime, $unRoomName, $unStatus, $unDigicode);
+		// fourniture de la réponse
+		return $uneReservation;
+	}
+	
+	
+} // fin de la classe DAO
+>>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
 
 // ATTENTION : on ne met pas de balise de fin de script pour ne pas prendre le risque
 // d'enregistrer d'espaces après la balise de fin de script !!!!!!!!!!!!
