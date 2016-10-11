@@ -44,10 +44,11 @@ else
 // modifié par Jim le 28/9/2015
 echo "<h3>Test de aPasseDesReservations : </h3>";
 $ok = $dao->aPasseDesReservations("isi");
-if ($ok)
+if ($ok==TRUE)
 	echo "<p>zenelsy a bien passé des réservations !<br>";
 else
 	echo "<p>zenelsy n'a pas passé de réservations !<br>";
+	echo $ok;
 $ok = $dao->aPasseDesReservations("fortetp");
 if ($ok)
 	echo "jim a bien passé des réservations !</p>";

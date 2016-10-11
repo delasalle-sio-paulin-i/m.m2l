@@ -358,7 +358,7 @@ class DAO
 		// extraction des données
 		$req->execute();
 		$uneLigne = $req->fetch(PDO::FETCH_OBJ);
-		if ($uneLigne== null)
+		if (empty($uneLigne) )
  			return FALSE;
  		else
  			return TRUE;
