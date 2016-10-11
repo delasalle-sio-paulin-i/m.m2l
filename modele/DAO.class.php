@@ -306,6 +306,49 @@ class DAO
 			return "1";
 	}
 	
+	public function testerDigicodeBatiment ($digicodeSaisi)
+	{
+		
+		
+		$txt_req = "Select count(*)";
+		$txt_req = $txt_req . " from mrbs_entry, mrbs_entry_digicode";
+		$txt_req = $txt_req . " where mrbs_entry.id = mrbs_entry_digicode.id";
+		$txt_req = $txt_req . " and room_id = :idBatiment";
+		$txt_req = $txt_req . " and digicode = :digicodeSaisi";
+		$txt_req = $txt_req . " and (start_time - :delaiDigicode) < " . time();
+		$txt_req = $txt_req . " and (end_time + :delaiDigicode) > " . time();
+		
+
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("idSalle", $idSalle, PDO::PARAM_STR);
+		$req->bindValue("digicodeSaisi", $digicodeSaisi, PDO::PARAM_STR);
+		$req->bindValue("delaiDigicode", $DELAI_DIGICODE, PDO::PARAM_INT);
+		
+		$req->execute();
+		$nbReponses = $req->fetchColumn(0);
+		// libère les ressources du jeu de données
+		$req->closeCursor();
+		
+		// fourniture de la réponse
+		if ($nbReponses == 0)
+			return "0";
+			else
+				return "1";
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public function supprimerUtilisateur($name) {
 	
 		$txt_req = "Delete From mrbs_users  Where name=:name  ";
@@ -378,8 +421,16 @@ public function getLesSalles()
 		return $lesSalles;
 	}
 
+	public function modifierMdpUser()
+	{
+		
 	
-} // fin de la classe DAO
+		
+	}
+		
+	
+	
+}  // fin de la classe DAO
 
 // ATTENTION : on ne met pas de balise de fin de script pour ne pas prendre le risque
 // d'enregistrer d'espaces après la balise de fin de script !!!!!!!!!!!!
