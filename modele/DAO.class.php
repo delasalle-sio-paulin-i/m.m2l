@@ -246,6 +246,25 @@ class DAO
 		return $lesReservations;
 	}
 
+	
+	/*public function getLesSalles($room_name)
+	{	// préparation de la requête de recherche
+		$txt_req = "Select room_name from mrbs_room";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("room_name", $room_name, PDO::PARAM_STR);
+		// extraction des données
+		$req->execute();
+		$uneLigne = $req->fetch(PDO::FETCH_OBJ);
+		// traitement de la réponse
+	
+		// libère les ressources du jeu de données
+		$req->closeCursor();
+		// fourniture de la réponse
+		return $reponse;
+	}*/
+	
+	
 	// fournit le niveau d'un utilisateur identifié par $nomUser et $mdpUser
 	// renvoie "utilisateur" ou "administrateur" si authentification correcte, "inconnu" sinon
 	// modifié par Jim le 5/5/2015
@@ -305,15 +324,16 @@ class DAO
 		else
 			return "1";
 	}
+//<<<<<<<<<<<< HEAD
 	
 	public function testerDigicodeBatiment ($digicodeSaisi)
 	{
-		
+		global $DELAI_DIGICODE;
 		
 		$txt_req = "Select count(*)";
 		$txt_req = $txt_req . " from mrbs_entry, mrbs_entry_digicode";
 		$txt_req = $txt_req . " where mrbs_entry.id = mrbs_entry_digicode.id";
-		$txt_req = $txt_req . " and room_id = :idBatiment";
+		
 		$txt_req = $txt_req . " and digicode = :digicodeSaisi";
 		$txt_req = $txt_req . " and (start_time - :delaiDigicode) < " . time();
 		$txt_req = $txt_req . " and (end_time + :delaiDigicode) > " . time();
@@ -321,14 +341,14 @@ class DAO
 
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
-		$req->bindValue("idSalle", $idSalle, PDO::PARAM_STR);
+		
 		$req->bindValue("digicodeSaisi", $digicodeSaisi, PDO::PARAM_STR);
 		$req->bindValue("delaiDigicode", $DELAI_DIGICODE, PDO::PARAM_INT);
 		
 		$req->execute();
-		$nbReponses = $req->fetchColumn(0);
+		$nbReponses = $req->fetch(PDO::FETCH_OBJ);
 		// libère les ressources du jeu de données
-		$req->closeCursor();
+		//$req->closeCursor();
 		
 		// fourniture de la réponse
 		if ($nbReponses == 0)
@@ -348,7 +368,12 @@ class DAO
 	
 	
 	
+//=======
+//>>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
 	
+
+	
+	// Fonction qui va supprimer l'utilisateur
 	public function supprimerUtilisateur($name) {
 	
 		$txt_req = "Delete From mrbs_users  Where name=:name  ";
@@ -363,13 +388,32 @@ class DAO
 
 	public function aPasseDesReservations($nomUser)
 	{
-		include_once ('DAO.class.php');
-		$dao = new DAO();
-		$testResa= $dao->getLesReservations($nomUser);
-		if ($testResa== !null)
-			return TRUE;
-		else 
-			return FALSE;
+// 		include_once ('DAO.class.php');
+// 		$dao = new DAO();
+// 		$testResa= $dao->getLesReservations($nomUser);
+// 		if ($testResa== !null)
+// 			return TRUE;
+// 		else 
+// 			return FALSE;
+
+		// préparation de la requete de recherche
+		$txt_req = "Select *";
+		$txt_req = $txt_req . " from mrbs_entry";
+		$txt_req = $txt_req . " where  create_by = :nomUser";
+// 		$txt_req = $txt_req . " and start_time > :time";
+		
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("nomUser", $nomUser, PDO::PARAM_STR);
+// 		$req->bindValue("time", time(), PDO::PARAM_INT);
+		// extraction des données
+		$req->execute();
+		$uneLigne = $req->fetch(PDO::FETCH_OBJ);
+		if (empty($uneLigne) )
+ 			return FALSE;
+ 		else
+ 			return TRUE;
+		
 	}
 	
 	public function getReservation($idReservation)
@@ -393,6 +437,70 @@ class DAO
 		$uneReservation = new Reservation($unId, $unTimeStamp, $unStartTime, $unEndTime, $unRoomName, $unStatus, $unDigicode);
 		// fourniture de la réponse
 		return $uneReservation;
+	}
+	
+	// annuler reservation
+	
+	public function annulerReservation($idReservation){
+		$txt_req = "Delete From mrbs_entry Where id=:idRes  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("idRes", utf8_decode($idReservation), PDO::PARAM_STR);
+		// exécution de la requete
+		$ok = $req->execute();
+		return $ok;
+	}
+	
+	// Confirmer reservation
+	
+	public function confirmerReservation($idReservation){
+		$txt_req = "Update From mrbs_entry Set status = '1' Where id=:idRes  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("idRes", utf8_decode($idReservation), PDO::PARAM_STR);
+		// exécution de la requete
+		$ok = $req->execute();
+		return $ok;
+	}
+	
+	//Envoyer mdp
+	
+	public function envoyerMdp($mail){
+		$chaine = 'azertyuiopqsdfghjklmwxcvbn123456789';
+		$nb_car= 8;
+		$nb_lettres = strlen($chaine) - 1;
+		$mdp = '';
+		
+		for($i=0; $i < $nb_car; $i++)
+		{
+			$pos = mt_rand(0, $nb_lettres);
+			$car = $chaine[$pos];
+			$mdp .= $car;
+		}
+		
+		$txt_req = "Select id From mrbs_user Where email=:mail  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("mail", utf8_decode($mail), PDO::PARAM_STR);
+		// exécution de la requete
+		$id = $req->execute();
+		
+		modifierMdpUser($id, $mdp);
+		$subject= 'Votre nouveau mot de passe';
+		$msg='Bonjour, voici votre nouveau mot de passe : '.$mdp;
+		mail($mail, $subject, $msg);
+		
+	}
+	
+	public function modifierMdpUser($id, $mdp){
+		$mdp=md5($mdp);
+		$txt_req = "Update From mrbs_user Set password=:mdp Where id=:id  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("mdp", utf8_decode($mdp), PDO::PARAM_STR);
+		$req->bindValue("id", utf8_decode($id), PDO::PARAM_STR);
+		// exécution de la requete
+		$id = $req->execute();
 	}
 	
 	
@@ -421,12 +529,8 @@ public function getLesSalles()
 		return $lesSalles;
 	}
 
-	public function modifierMdpUser()
-	{
-		
+
 	
-		
-	}
 		
 	
 	

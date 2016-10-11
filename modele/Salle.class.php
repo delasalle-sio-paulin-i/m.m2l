@@ -20,7 +20,7 @@ class Salle
 	// ----------------------------------------- Constructeur -----------------------------------------------
 	// ------------------------------------------------------------------------------------------------------
 
-	public function Utilisateur($unId, $unRoom_name, $unCapacity, $unAreaName) {
+	public function Salle($unId, $unRoom_name, $unCapacity, $unAreaName) {
 		$this->id = $unId;
 		$this->Room_name = $unRoom_name;
 		$this->Capacity = $unCapacity;
@@ -43,6 +43,9 @@ class Salle
 	public function getAreaName()	{return $this->AreaName;}
 	public function setAreaName($unAreaName) {$this->AreaName = $unAreaName;}
 
+	
+	
+
 	// ------------------------------------------------------------------------------------------------------
 	// -------------------------------------- Méthodes d'instances ------------------------------------------
 	// ------------------------------------------------------------------------------------------------------
@@ -54,7 +57,7 @@ class Salle
 		$msg .= 'Capacity : ' . $this->getCapacity() . '<br>';
 		$msg .= 'Area Name : ' . $this->getAreaName() . '<br>';
 		$msg .= '<br>';
-
+ 
 		return $msg;
 	}
 
