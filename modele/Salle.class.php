@@ -20,7 +20,7 @@ class Salle
 	// ----------------------------------------- Constructeur -----------------------------------------------
 	// ------------------------------------------------------------------------------------------------------
 
-	public function Utilisateur($unId, $unRoom_name, $unCapacity, $unAreaName) {
+	public function Salle($unId, $unRoom_name, $unCapacity, $unAreaName) {
 		$this->id = $unId;
 		$this->Room_name = $unRoom_name;
 		$this->Capacity = $unCapacity;

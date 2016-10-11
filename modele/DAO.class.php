@@ -210,7 +210,7 @@ class DAO
 		$txt_req = $txt_req . " where mrbs_entry.room_id = mrbs_room.id";
 		$txt_req = $txt_req . " and mrbs_entry.id = mrbs_entry_digicode.id";
 		$txt_req = $txt_req . " and create_by = :nomUser";
-		$txt_req = $txt_req . " and start_time > :time";
+// 		$txt_req = $txt_req . " and start_time > :time";
 		$txt_req = $txt_req . " order by start_time, room_name";
 		
 		$req = $this->cnx->prepare($txt_req);
@@ -247,6 +247,9 @@ class DAO
 	}
 
 
+
+
+
 	//fournit un objet Utilisateur à partir de son nom $nomUser
 	public function getUtilisateur($nomUser)
 	{	// préparation de la requête de recherche
@@ -270,11 +273,8 @@ class DAO
 		$unUtilisateur = new Utilisateur($id, $level, $name, $password, $email);
 		return $unUtilisateur;
 	}
+}
 
-	else{}
-	// fourniture de la réponse
-	
-	}
 
 	
 	
@@ -393,13 +393,13 @@ class DAO
 		$req->execute();
 		$uneLigne = $req->fetch(PDO::FETCH_OBJ);
 		// traitement de la réponse
-		$unId = utf8_encode($uneLigne->id_entry);
+		$unId = utf8_encode($uneLigne->id);
 		$unTimeStamp = utf8_encode($uneLigne->timestamp);
 		$unStartTime = utf8_encode($uneLigne->start_time);
 		$unEndTime = utf8_encode($uneLigne->end_time);
-		$unRoomName = utf8_encode($uneLigne->room_name);
+		$unRoomName = utf8_encode($uneLigne->name);
 		$unStatus = utf8_encode($uneLigne->status);
-		$unDigicode = utf8_encode($uneLigne->digicode);
+		$unDigicode = "";//utf8_encode($uneLigne->digicode);
 		
 		$uneReservation = new Reservation($unId, $unTimeStamp, $unStartTime, $unEndTime, $unRoomName, $unStatus, $unDigicode);
 		// fourniture de la réponse
@@ -421,10 +421,10 @@ class DAO
 	// Confirmer reservation
 	
 	public function confirmerReservation($idReservation){
-		$txt_req = "Update From mrbs_entry Set status = '1' Where id=:idRes  ";
+		$txt_req = "Update mrbs_entry Set status = '1' Where id=:idRes";
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
-		$req->bindValue("idRes", utf8_decode($idReservation), PDO::PARAM_STR);
+		$req->bindValue("idRes", $idReservation, PDO::PARAM_STR);
 		// exécution de la requete
 		$ok = $req->execute();
 		return $ok;
@@ -488,14 +488,33 @@ class DAO
 	
 	public function getLesSalles(){
 		$date=strtotime("now");
-		$txt_req = "Select * From mrbs_room Where id NOT IN (Select room_id From mrbs_entry Where start_time < :date And end_time > :date  ";
+		$txt_req = "Select * From mrbs_room Where id NOT IN (Select room_id From mrbs_entry Where start_time < :date And end_time > :date ) ";
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
 		$req->bindValue("date", utf8_decode($date), PDO::PARAM_STR);
 		// exécution de la requete
-		$res = $req->execute();
-		return $res;
+		$req->execute();
+		$uneLigne = $req->fetch(PDO::FETCH_OBJ);
+		
+		$lesSalles=array();
+		
+		while ($uneLigne)
+		{	// création d'un objet Reservation
+			$unId = utf8_encode($uneLigne->id);
+			$unRoomName = utf8_encode($uneLigne->room_name);
+			$uneCapacite = utf8_encode($uneLigne->capacity);
+			$unCodeArea = utf8_encode($uneLigne->area_id);
+			
+			$uneSalle = new Salle($unId, $unRoomName, $uneCapacite, $unCodeArea);
+			// ajout de la réservation à la collection
+			$lesSalles[] = $uneSalle;
+			// extrait la ligne suivante
+			$uneLigne = $req->fetch(PDO::FETCH_OBJ);
+		}
+		
+		return $lesSalles;
 	}
+
 
 } // fin de la classe DAO
 
