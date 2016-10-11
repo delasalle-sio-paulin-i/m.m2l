@@ -210,7 +210,7 @@ class DAO
 		$txt_req = $txt_req . " where mrbs_entry.room_id = mrbs_room.id";
 		$txt_req = $txt_req . " and mrbs_entry.id = mrbs_entry_digicode.id";
 		$txt_req = $txt_req . " and create_by = :nomUser";
-		$txt_req = $txt_req . " and start_time > :time";
+// 		$txt_req = $txt_req . " and start_time > :time";
 		$txt_req = $txt_req . " order by start_time, room_name";
 		
 		$req = $this->cnx->prepare($txt_req);
@@ -246,36 +246,36 @@ class DAO
 		return $lesReservations;
 	}
 
-	
-	/*public function getLesSalles($room_name)
-=======
+
+
+
+
 	//fournit un objet Utilisateur à partir de son nom $nomUser
 	public function getUtilisateur($nomUser)
->>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
 	{	// préparation de la requête de recherche
-	$txt_req = "Select level from mrbs_users where name=";
+	$txt_req = "Select * from mrbs_users where name= :nomUser";
 	$req = $this->cnx->prepare($txt_req);
 	// liaison de la requête et de ses paramètres
 	$req->bindValue("nomUser", $nomUser, PDO::PARAM_STR);
 	// extraction des données
-	$req->execute();
+	
+	$req->execute();	
 	$uneLigne = $req->fetch(PDO::FETCH_OBJ);
 	
-<<<<<<< HEAD
-		// libère les ressources du jeu de données
-		$req->closeCursor();
-		// fourniture de la réponse
-		return $reponse;
-	}*/
-=======
-	// libère les ressources du jeu de données
-	$req->closeCursor();
-	// fourniture de la réponse
-	return $reponse;
+	if (!empty($uneLigne))
+	{
+		$id = utf8_encode($uneLigne->id);
+		$level = utf8_encode($uneLigne->level);
+		$name = utf8_encode($uneLigne->name);
+		$password = utf8_encode($uneLigne->password);
+		$email = utf8_encode($uneLigne->email);
+		
+		$unUtilisateur = new Utilisateur($id, $level, $name, $password, $email);
+		return $unUtilisateur;
 	}
-=======
->>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
->>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
+}
+
+
 	
 	
 	// fournit le niveau d'un utilisateur identifié par $nomUser et $mdpUser
@@ -337,52 +337,6 @@ class DAO
 		else
 			return "1";
 	}
-//<<<<<<<<<<<< HEAD
-	
-	public function testerDigicodeBatiment ($digicodeSaisi)
-	{
-		global $DELAI_DIGICODE;
-		
-		$txt_req = "Select count(*)";
-		$txt_req = $txt_req . " from mrbs_entry, mrbs_entry_digicode";
-		$txt_req = $txt_req . " where mrbs_entry.id = mrbs_entry_digicode.id";
-		
-		$txt_req = $txt_req . " and digicode = :digicodeSaisi";
-		$txt_req = $txt_req . " and (start_time - :delaiDigicode) < " . time();
-		$txt_req = $txt_req . " and (end_time + :delaiDigicode) > " . time();
-		
-
-		$req = $this->cnx->prepare($txt_req);
-		// liaison de la requête et de ses paramètres
-		
-		$req->bindValue("digicodeSaisi", $digicodeSaisi, PDO::PARAM_STR);
-		$req->bindValue("delaiDigicode", $DELAI_DIGICODE, PDO::PARAM_INT);
-		
-		$req->execute();
-		$nbReponses = $req->fetch(PDO::FETCH_OBJ);
-		// libère les ressources du jeu de données
-		//$req->closeCursor();
-		
-		// fourniture de la réponse
-		if ($nbReponses == 0)
-			return "0";
-			else
-				return "1";
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-//=======
-//>>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
 	
 
 	
@@ -439,13 +393,13 @@ class DAO
 		$req->execute();
 		$uneLigne = $req->fetch(PDO::FETCH_OBJ);
 		// traitement de la réponse
-		$unId = utf8_encode($uneLigne->id_entry);
+		$unId = utf8_encode($uneLigne->id);
 		$unTimeStamp = utf8_encode($uneLigne->timestamp);
 		$unStartTime = utf8_encode($uneLigne->start_time);
 		$unEndTime = utf8_encode($uneLigne->end_time);
-		$unRoomName = utf8_encode($uneLigne->room_name);
+		$unRoomName = utf8_encode($uneLigne->name);
 		$unStatus = utf8_encode($uneLigne->status);
-		$unDigicode = utf8_encode($uneLigne->digicode);
+		$unDigicode = "";//utf8_encode($uneLigne->digicode);
 		
 		$uneReservation = new Reservation($unId, $unTimeStamp, $unStartTime, $unEndTime, $unRoomName, $unStatus, $unDigicode);
 		// fourniture de la réponse
@@ -467,10 +421,10 @@ class DAO
 	// Confirmer reservation
 	
 	public function confirmerReservation($idReservation){
-		$txt_req = "Update From mrbs_entry Set status = '1' Where id=:idRes  ";
+		$txt_req = "Update mrbs_entry Set status = '1' Where id=:idRes";
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
-		$req->bindValue("idRes", utf8_decode($idReservation), PDO::PARAM_STR);
+		$req->bindValue("idRes", $idReservation, PDO::PARAM_STR);
 		// exécution de la requete
 		$ok = $req->execute();
 		return $ok;
@@ -516,42 +470,40 @@ class DAO
 		$id = $req->execute();
 	}
 	
+
+	public function testerDigicodeBatiment ($digicodeSaisi)
+	{
+		global $DELAI_DIGICODE;
 	
-<<<<<<< HEAD
-public function getLesSalles()
-	{	// préparation de la requete de recherche
-		$txt_req = "Select * from mrbs_room";
+		$txt_req = "Select count(*)";
+		$txt_req = $txt_req . " from mrbs_entry, mrbs_entry_digicode";
+		$txt_req = $txt_req . " where mrbs_entry.id = mrbs_entry_digicode.id";
+	
+		$txt_req = $txt_req . " and digicode = :digicodeSaisi";
+		$txt_req = $txt_req . " and (start_time - :delaiDigicode) < " . time();
+		$txt_req = $txt_req . " and (end_time + :delaiDigicode) > " . time();
+	
+	
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
-		
+	
+		$req->bindValue("digicodeSaisi", $digicodeSaisi, PDO::PARAM_STR);
+		$req->bindValue("delaiDigicode", $DELAI_DIGICODE, PDO::PARAM_INT);
+	
 		$req->execute();
-		$uneLigne = $req->fetch(PDO::FETCH_OBJ);
-		// construction d'une collection d'objets Reservation
-		$lesSalles = array();
-		// tant qu'une ligne est trouvée :
-		while ($uneLigne)
-		{	// création d'un objet Reservation
-			
-			$nom = utf8_encode($uneLigne->room_name);
-				
-			// extrait la ligne suivante
-			$uneLigne = $req->fetch(PDO::FETCH_OBJ);
-		}
+		$nbReponses = $req->fetch(PDO::FETCH_OBJ);
 		// libère les ressources du jeu de données
-		$req->closeCursor();
-		// fourniture de la collection
-		return $lesSalles;
+		//$req->closeCursor();
+	
+		// fourniture de la réponse
+		if ($nbReponses == 0)
+			return "0";
+			else
+				return "1";
+	
 	}
+	
 
-
-	
-		
-	
-	
-}  // fin de la classe DAO
-=======
-<<<<<<< HEAD
-=======
 	public function existeReservation($idRes){
 		$txt_req = "Select * From mrbs_entry Where id:=idRes  ";
 		$req = $this->cnx->prepare($txt_req);
@@ -568,17 +520,35 @@ public function getLesSalles()
 	
 	public function getLesSalles(){
 		$date=strtotime("now");
-		$txt_req = "Select * From mrbs_room Where id NOT IN (Select room_id From mrbs_entry Where start_time < :date And end_time > :date  ";
+		$txt_req = "Select * From mrbs_room Where id NOT IN (Select room_id From mrbs_entry Where start_time < :date And end_time > :date ) ";
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
 		$req->bindValue("date", utf8_decode($date), PDO::PARAM_STR);
 		// exécution de la requete
-		$res = $req->execute();
-		return $res;
+		$req->execute();
+		$uneLigne = $req->fetch(PDO::FETCH_OBJ);
+		
+		$lesSalles=array();
+		
+		while ($uneLigne)
+		{	// création d'un objet Reservation
+			$unId = utf8_encode($uneLigne->id);
+			$unRoomName = utf8_encode($uneLigne->room_name);
+			$uneCapacite = utf8_encode($uneLigne->capacity);
+			$unCodeArea = utf8_encode($uneLigne->area_id);
+			
+			$uneSalle = new Salle($unId, $unRoomName, $uneCapacite, $unCodeArea);
+			// ajout de la réservation à la collection
+			$lesSalles[] = $uneSalle;
+			// extrait la ligne suivante
+			$uneLigne = $req->fetch(PDO::FETCH_OBJ);
+		}
+		
+		return $lesSalles;
 	}
->>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
+
+
 } // fin de la classe DAO
->>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
 
 // ATTENTION : on ne met pas de balise de fin de script pour ne pas prendre le risque
 // d'enregistrer d'espaces après la balise de fin de script !!!!!!!!!!!!
