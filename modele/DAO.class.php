@@ -246,6 +246,25 @@ class DAO
 		return $lesReservations;
 	}
 
+	
+	public function getLesSalles($room_name)
+	{	// préparation de la requête de recherche
+		$txt_req = "Select room_name from mrbs_room";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("room_name", $room_name, PDO::PARAM_STR);
+		// extraction des données
+		$req->execute();
+		$uneLigne = $req->fetch(PDO::FETCH_OBJ);
+		// traitement de la réponse
+	
+		// libère les ressources du jeu de données
+		$req->closeCursor();
+		// fourniture de la réponse
+		return $reponse;
+	}
+	
+	
 	// fournit le niveau d'un utilisateur identifié par $nomUser et $mdpUser
 	// renvoie "utilisateur" ou "administrateur" si authentification correcte, "inconnu" sinon
 	// modifié par Jim le 5/5/2015
@@ -306,6 +325,9 @@ class DAO
 			return "1";
 	}
 	
+
+	
+	// Fonction qui va supprimer l'utilisateur
 	public function supprimerUtilisateur($name) {
 	
 		$txt_req = "Delete From mrbs_users  Where name=:name  ";
@@ -426,7 +448,7 @@ class DAO
 	
 	public function modifierMdpUser($id, $mdp){
 		$mdp=md5($mdp);
-		$txt_req = "Update From mrbs_user Set password= :mdp Where id=:id  ";
+		$txt_req = "Update From mrbs_user Set password=:mdp Where id=:id  ";
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
 		$req->bindValue("mdp", utf8_decode($mdp), PDO::PARAM_STR);
