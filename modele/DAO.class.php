@@ -245,26 +245,37 @@ class DAO
 		// fourniture de la collection
 		return $lesReservations;
 	}
-<<<<<<< HEAD
+
 
 	//fournit un objet Utilisateur à partir de son nom $nomUser
 	public function getUtilisateur($nomUser)
 	{	// préparation de la requête de recherche
-	$txt_req = "Select level from mrbs_users where name=";
+	$txt_req = "Select * from mrbs_users where name= :nomUser";
 	$req = $this->cnx->prepare($txt_req);
 	// liaison de la requête et de ses paramètres
 	$req->bindValue("nomUser", $nomUser, PDO::PARAM_STR);
 	// extraction des données
-	$req->execute();
+	
+	$req->execute();	
 	$uneLigne = $req->fetch(PDO::FETCH_OBJ);
 	
-	// libère les ressources du jeu de données
-	$req->closeCursor();
-	// fourniture de la réponse
-	return $reponse;
+	if (!empty($uneLigne))
+	{
+		$id = utf8_encode($uneLigne->id);
+		$level = utf8_encode($uneLigne->level);
+		$name = utf8_encode($uneLigne->name);
+		$password = utf8_encode($uneLigne->password);
+		$email = utf8_encode($uneLigne->email);
+		
+		$unUtilisateur = new Utilisateur($id, $level, $name, $password, $email);
+		return $unUtilisateur;
 	}
-=======
->>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
+
+	else{}
+	// fourniture de la réponse
+	
+	}
+
 	
 	
 	// fournit le niveau d'un utilisateur identifié par $nomUser et $mdpUser
@@ -460,8 +471,7 @@ class DAO
 	}
 	
 	
-<<<<<<< HEAD
-=======
+
 	public function existeReservation($idRes){
 		$txt_req = "Select * From mrbs_entry Where id:=idRes  ";
 		$req = $this->cnx->prepare($txt_req);
@@ -486,7 +496,7 @@ class DAO
 		$res = $req->execute();
 		return $res;
 	}
->>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
+
 } // fin de la classe DAO
 
 // ATTENTION : on ne met pas de balise de fin de script pour ne pas prendre le risque
