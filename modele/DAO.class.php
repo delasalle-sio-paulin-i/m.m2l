@@ -210,7 +210,7 @@ class DAO
 		$txt_req = $txt_req . " where mrbs_entry.room_id = mrbs_room.id";
 		$txt_req = $txt_req . " and mrbs_entry.id = mrbs_entry_digicode.id";
 		$txt_req = $txt_req . " and create_by = :nomUser";
-// 		$txt_req = $txt_req . " and start_time > :time";
+ 		$txt_req = $txt_req . " and start_time > :time";
 		$txt_req = $txt_req . " order by start_time, room_name";
 		
 		$req = $this->cnx->prepare($txt_req);
