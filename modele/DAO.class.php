@@ -245,6 +245,7 @@ class DAO
 		// fourniture de la collection
 		return $lesReservations;
 	}
+<<<<<<< HEAD
 
 	//fournit un objet Utilisateur à partir de son nom $nomUser
 	public function getUtilisateur($nomUser)
@@ -262,6 +263,8 @@ class DAO
 	// fourniture de la réponse
 	return $reponse;
 	}
+=======
+>>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
 	
 	
 	// fournit le niveau d'un utilisateur identifié par $nomUser et $mdpUser
@@ -457,6 +460,33 @@ class DAO
 	}
 	
 	
+<<<<<<< HEAD
+=======
+	public function existeReservation($idRes){
+		$txt_req = "Select * From mrbs_entry Where id:=idRes  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("idRes", utf8_decode($idRes), PDO::PARAM_STR);
+		// exécution de la requete
+		$res = $req->execute();
+		if(empty($res)){
+			return FALSE;
+		}else{
+			return TRUE;
+		}
+	}
+	
+	public function getLesSalles(){
+		$date=strtotime("now");
+		$txt_req = "Select * From mrbs_room Where id NOT IN (Select room_id From mrbs_entry Where start_time < :date And end_time > :date  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("date", utf8_decode($date), PDO::PARAM_STR);
+		// exécution de la requete
+		$res = $req->execute();
+		return $res;
+	}
+>>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
 } // fin de la classe DAO
 
 // ATTENTION : on ne met pas de balise de fin de script pour ne pas prendre le risque
