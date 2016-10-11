@@ -58,7 +58,7 @@ class Outils
 		$temporaire = str_replace ("-", "/", $laDate);
 		return $temporaire;
 	}
-	
+
 	// met en majuscules le premier caractère, et le caractère qui suit un éventuel tiret (le reste en minuscules)
 	public static function corrigerPrenom ($lePrenom)
 	{	if ($lePrenom != "")
