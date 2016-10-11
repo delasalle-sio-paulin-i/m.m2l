@@ -245,24 +245,6 @@ class DAO
 		// fourniture de la collection
 		return $lesReservations;
 	}
-
-	
-	public function getLesSalles($room_name)
-	{	// préparation de la requête de recherche
-		$txt_req = "Select room_name from mrbs_room";
-		$req = $this->cnx->prepare($txt_req);
-		// liaison de la requête et de ses paramètres
-		$req->bindValue("room_name", $room_name, PDO::PARAM_STR);
-		// extraction des données
-		$req->execute();
-		$uneLigne = $req->fetch(PDO::FETCH_OBJ);
-		// traitement de la réponse
-	
-		// libère les ressources du jeu de données
-		$req->closeCursor();
-		// fourniture de la réponse
-		return $reponse;
-	}
 	
 	
 	// fournit le niveau d'un utilisateur identifié par $nomUser et $mdpUser
@@ -485,20 +467,15 @@ class DAO
 		}
 	}
 	
-	public function getLesSalles($date){
-		$date=strtotime($date);
+	public function getLesSalles(){
+		$date=strtotime("now");
 		$txt_req = "Select * From mrbs_room Where id NOT IN (Select room_id From mrbs_entry Where start_time < :date And end_time > :date  ";
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
 		$req->bindValue("date", utf8_decode($date), PDO::PARAM_STR);
 		// exécution de la requete
 		$res = $req->execute();
-		$res= $res->fetch();
-		echo 'Salles libres à cet horaire : <br>';
-		foreach($res as $value)
-		{
-			echo'-'.$value->room_name.'<br>';
-		}
+		return $res;
 	}
 } // fin de la classe DAO
 
