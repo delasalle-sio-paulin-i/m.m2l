@@ -24,7 +24,7 @@
 // getLesSalles                  : fournit la liste des salles disponibles à la réservation
 // getNiveauUtilisateur          : fournit le niveau d'un utilisateur identifié par $nomUser et $mdpUser
 // getReservation                : fournit un objet Reservation à partir de son identifiant $idReservation
-// getUtilisateur                : fournit un objet Utilisateur à partir de son nom $nomUser
+// getUtilisateur                : //fournit un objet Utilisateur à partir de son nom $nomUser
 // modifierMdpUser               : enregistre le nouveau mot de passe de l'utilisateur dans la bdd après l'avoir hashé en MD5
 // supprimerUtilisateur          : supprime l'utilisateur dans la bdd
 // testerDigicodeBatiment        : teste si le digicode saisi ($digicodeSaisi) correspond bien à une réservation de salle quelconque
@@ -245,6 +245,26 @@ class DAO
 		// fourniture de la collection
 		return $lesReservations;
 	}
+<<<<<<< HEAD
+
+	//fournit un objet Utilisateur à partir de son nom $nomUser
+	public function getUtilisateur($nomUser)
+	{	// préparation de la requête de recherche
+	$txt_req = "Select level from mrbs_users where name=";
+	$req = $this->cnx->prepare($txt_req);
+	// liaison de la requête et de ses paramètres
+	$req->bindValue("nomUser", $nomUser, PDO::PARAM_STR);
+	// extraction des données
+	$req->execute();
+	$uneLigne = $req->fetch(PDO::FETCH_OBJ);
+	
+	// libère les ressources du jeu de données
+	$req->closeCursor();
+	// fourniture de la réponse
+	return $reponse;
+	}
+=======
+>>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
 	
 	
 	// fournit le niveau d'un utilisateur identifié par $nomUser et $mdpUser
@@ -439,20 +459,9 @@ class DAO
 		$id = $req->execute();
 	}
 	
-	public function estLeCreateur($idUser, $idRes){
-		$txt_req = "Select create_by From mrbs_entry Where id:=idRes  ";
-		$req = $this->cnx->prepare($txt_req);
-		// liaison de la requête et de ses paramètres
-		$req->bindValue("idRes", utf8_decode($idRes), PDO::PARAM_STR);
-		// exécution de la requete
-		$res = $req->execute();
-		if($idUser==$res){
-			return TRUE;
-		}else{
-			return FALSE;
-		}
-	}
 	
+<<<<<<< HEAD
+=======
 	public function existeReservation($idRes){
 		$txt_req = "Select * From mrbs_entry Where id:=idRes  ";
 		$req = $this->cnx->prepare($txt_req);
@@ -495,6 +504,7 @@ class DAO
 		
 		return $lesSalles;
 	}
+>>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
 } // fin de la classe DAO
 
 // ATTENTION : on ne met pas de balise de fin de script pour ne pas prendre le risque
