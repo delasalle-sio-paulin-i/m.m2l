@@ -337,13 +337,32 @@ class DAO
 
 	public function aPasseDesReservations($nomUser)
 	{
-		include_once ('DAO.class.php');
-		$dao = new DAO();
-		$testResa= $dao->getLesReservations($nomUser);
-		if ($testResa== !null)
-			return TRUE;
-		else 
-			return FALSE;
+// 		include_once ('DAO.class.php');
+// 		$dao = new DAO();
+// 		$testResa= $dao->getLesReservations($nomUser);
+// 		if ($testResa== !null)
+// 			return TRUE;
+// 		else 
+// 			return FALSE;
+
+		// préparation de la requete de recherche
+		$txt_req = "Select *";
+		$txt_req = $txt_req . " from mrbs_entry";
+		$txt_req = $txt_req . " where  create_by = :nomUser";
+// 		$txt_req = $txt_req . " and start_time > :time";
+		
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("nomUser", $nomUser, PDO::PARAM_STR);
+// 		$req->bindValue("time", time(), PDO::PARAM_INT);
+		// extraction des données
+		$req->execute();
+		$uneLigne = $req->fetch(PDO::FETCH_OBJ);
+		if ($uneLigne== null)
+ 			return FALSE;
+ 		else
+ 			return TRUE;
+		
 	}
 	
 	public function getReservation($idReservation)
@@ -369,7 +388,69 @@ class DAO
 		return $uneReservation;
 	}
 	
+	// annuler reservation
 	
+	public function annulerReservation($idReservation){
+		$txt_req = "Delete From mrbs_entry Where id=:idRes  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("idRes", utf8_decode($idReservation), PDO::PARAM_STR);
+		// exécution de la requete
+		$ok = $req->execute();
+		return $ok;
+	}
+	
+	// Confirmer reservation
+	
+	public function confirmerReservation($idReservation){
+		$txt_req = "Update From mrbs_entry Set status = '1' Where id=:idRes  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("idRes", utf8_decode($idReservation), PDO::PARAM_STR);
+		// exécution de la requete
+		$ok = $req->execute();
+		return $ok;
+	}
+	
+	//Envoyer mdp
+	
+	public function envoyerMdp($mail){
+		$chaine = 'azertyuiopqsdfghjklmwxcvbn123456789';
+		$nb_car= 8;
+		$nb_lettres = strlen($chaine) - 1;
+		$mdp = '';
+		
+		for($i=0; $i < $nb_car; $i++)
+		{
+			$pos = mt_rand(0, $nb_lettres);
+			$car = $chaine[$pos];
+			$mdp .= $car;
+		}
+		
+		$txt_req = "Select id From mrbs_user Where email=:mail  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("mail", utf8_decode($mail), PDO::PARAM_STR);
+		// exécution de la requete
+		$id = $req->execute();
+		
+		modifierMdpUser($id, $mdp);
+		$subject= 'Votre nouveau mot de passe';
+		$msg='Bonjour, voici votre nouveau mot de passe : '.$mdp;
+		mail($mail, $subject, $msg);
+		
+	}
+	
+	public function modifierMdpUser($id, $mdp){
+		$mdp=md5($mdp);
+		$txt_req = "Update From mrbs_user Set password= :mdp Where id=:id  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("mdp", utf8_decode($mdp), PDO::PARAM_STR);
+		$req->bindValue("id", utf8_decode($id), PDO::PARAM_STR);
+		// exécution de la requete
+		$id = $req->execute();
+	}
 } // fin de la classe DAO
 
 // ATTENTION : on ne met pas de balise de fin de script pour ne pas prendre le risque
