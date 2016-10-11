@@ -245,7 +245,6 @@ class DAO
 		// fourniture de la collection
 		return $lesReservations;
 	}
-<<<<<<< HEAD
 
 	//fournit un objet Utilisateur à partir de son nom $nomUser
 	public function getUtilisateur($nomUser)
@@ -263,8 +262,6 @@ class DAO
 	// fourniture de la réponse
 	return $reponse;
 	}
-=======
->>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
 	
 	
 	// fournit le niveau d'un utilisateur identifié par $nomUser et $mdpUser
@@ -460,8 +457,6 @@ class DAO
 	}
 	
 	
-<<<<<<< HEAD
-=======
 	public function existeReservation($idRes){
 		$txt_req = "Select * From mrbs_entry Where id:=idRes  ";
 		$req = $this->cnx->prepare($txt_req);
@@ -504,7 +499,6 @@ class DAO
 		
 		return $lesSalles;
 	}
->>>>>>> branch 'master' of https://github.com/delasalle-sio-paulin-i/m.m2l.git
 } // fin de la classe DAO
 
 // ATTENTION : on ne met pas de balise de fin de script pour ne pas prendre le risque
