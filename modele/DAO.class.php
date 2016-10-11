@@ -434,6 +434,50 @@ class DAO
 		// exécution de la requete
 		$id = $req->execute();
 	}
+	
+	public function estLeCreateur($idUser, $idRes){
+		$txt_req = "Select create_by From mrbs_entry Where id:=idRes  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("idRes", utf8_decode($idRes), PDO::PARAM_STR);
+		// exécution de la requete
+		$res = $req->execute();
+		if($idUser==$res){
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
+	
+	public function existeReservation($idRes){
+		$txt_req = "Select * From mrbs_entry Where id:=idRes  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("idRes", utf8_decode($idRes), PDO::PARAM_STR);
+		// exécution de la requete
+		$res = $req->execute();
+		if(empty($res)){
+			return FALSE;
+		}else{
+			return TRUE;
+		}
+	}
+	
+	public function getLesSalles($date){
+		$date=strtotime($date);
+		$txt_req = "Select * From mrbs_room Where id NOT IN (Select room_id From mrbs_entry Where start_time < :date And end_time > :date  ";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("date", utf8_decode($date), PDO::PARAM_STR);
+		// exécution de la requete
+		$res = $req->execute();
+		$res= $res->fetch();
+		echo 'Salles libres à cet horaire : <br>';
+		foreach($res as $value)
+		{
+			echo'-'.$value->room_name.'<br>';
+		}
+	}
 } // fin de la classe DAO
 
 // ATTENTION : on ne met pas de balise de fin de script pour ne pas prendre le risque
