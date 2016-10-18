@@ -38,3 +38,4 @@ else {
 	
 	unset($dao);		// fermeture de la connexion à MySQL
 }
+?>
