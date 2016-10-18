@@ -20,7 +20,7 @@ else {
 		$message = "Il n'y a aucune salle disponible !";
 	}
 	else{
-		$message="Il y a ".$nbReponses."Salles disponibles !";
+		$message="Il y a ".$nbReponses." Salles disponibles !";
 		
 	}
 	include_once ('vues/VueConsulterSalles.php');

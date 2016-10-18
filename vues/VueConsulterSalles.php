@@ -27,7 +27,7 @@
 				// chaque réservation est affichée à l'aide d'un élément de liste <li>
 				// chaque élément de liste <li> peut contenir des titres et des paragraphes
 
-				foreach ($lesSalles as $lesSalles)
+				foreach ($lesSalles as $uneSalle)
 				{ ?>
 					<li><a href="#">
 					<h5>Salle : <?php echo $uneSalle->getRoom_name(); ?></h5>
