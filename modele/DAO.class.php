@@ -459,15 +459,16 @@ class DAO
 		
 	}
 	
-	public function modifierMdpUser($id, $mdp){
+	public function modifierMdpUser($nom, $mdp){
 		$mdp=md5($mdp);
-		$txt_req = "Update From mrbs_user Set password=:mdp Where id=:id  ";
+		$txt_req = "Update mrbs_users Set password=:mdp Where name=:nom  ";
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
 		$req->bindValue("mdp", utf8_decode($mdp), PDO::PARAM_STR);
-		$req->bindValue("id", utf8_decode($id), PDO::PARAM_STR);
+		$req->bindValue("nom", utf8_decode($nom), PDO::PARAM_STR);
 		// exécution de la requete
-		$id = $req->execute();
+		$ok=$req->execute();
+		return $ok;
 	}
 	
 
@@ -498,8 +499,8 @@ class DAO
 		// fourniture de la réponse
 		if ($nbReponses == 0)
 			return "0";
-			else
-				return "1";
+		else
+			return "1";
 	
 	}
 	
