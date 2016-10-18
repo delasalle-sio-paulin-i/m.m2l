@@ -506,7 +506,7 @@ class DAO
 	
 
 	public function existeReservation($idRes){
-		$txt_req = "Select count(*) From mrbs_entry Where id:=idRes  ";
+		$txt_req = "Select count(*) From mrbs_entry Where id=:idRes  ";
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
 		$req->bindValue("idRes", utf8_decode($idRes), PDO::PARAM_STR);
