@@ -499,7 +499,7 @@ class DAO
 		$lesSalles=array();
 		
 		while ($uneLigne)
-		{	// création d'un objet Reservation
+		{	// création d'un objet salle
 			$unId = utf8_encode($uneLigne->id);
 			$unRoomName = utf8_encode($uneLigne->room_name);
 			$uneCapacite = utf8_encode($uneLigne->capacity);
