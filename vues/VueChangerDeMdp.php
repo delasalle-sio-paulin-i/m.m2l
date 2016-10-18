@@ -36,7 +36,7 @@
 							</div>
 							<div data-role="fieldcontain" style="margin-top: 0px; margin-bottom: 0px;">
 								<p style="margin-top: 0px; margin-bottom: 0px;">
-									<input type="submit" name="btnConnecter" id="btnConnecter" data-mini="true" data-ajax="false" value="Me connecter">
+									<input type="submit" name="btnConnecter" id="btnConnecter" data-mini="true" data-ajax="false" value="Valider">
 								</p>
 							</div>
 						</form>

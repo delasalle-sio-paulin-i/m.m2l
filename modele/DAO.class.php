@@ -421,7 +421,7 @@ class DAO
 	// Confirmer reservation
 	
 	public function confirmerReservation($idReservation){
-		$txt_req = "Update mrbs_entry Set status = '1' Where id=:idRes";
+		$txt_req = "Update mrbs_entry Set status = '0' Where id=:idRes";
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
 		$req->bindValue("idRes", $idReservation, PDO::PARAM_STR);
@@ -506,16 +506,17 @@ class DAO
 	
 
 	public function existeReservation($idRes){
-		$txt_req = "Select * From mrbs_entry Where id:=idRes  ";
+		$txt_req = "Select count(*) From mrbs_entry Where id:=idRes  ";
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
 		$req->bindValue("idRes", utf8_decode($idRes), PDO::PARAM_STR);
 		// exécution de la requete
-		$res = $req->execute();
-		if(empty($res)){
-			return FALSE;
+		$req->execute();
+		$res = $req->fetchColumn(0);
+		if($res==0){
+			return false;
 		}else{
-			return TRUE;
+			return true;
 		}
 	}
 	
@@ -548,6 +549,25 @@ class DAO
 		return $lesSalles;
 	}
 
+	public function estLeCreateur($nomUser,$idReservation)
+		{	// préparation de la requete de recherche
+		$txt_req = "Select count(*) from mrbs_entry where create_by = :nomUser AND id = :idReservation";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("nomUser", $nomUser, PDO::PARAM_STR);
+		$req->bindValue("idReservation", $idReservation, PDO::PARAM_STR);
+		// exécution de la requete
+		$req->execute();
+		$res = $req->fetchColumn(0);
+		// libère les ressources du jeu de données
+		$req->closeCursor();
+		
+		// fourniture de la réponse
+		if ($res == 0)
+			return false;
+		else
+			return true;
+		}
 
 } // fin de la classe DAO
 

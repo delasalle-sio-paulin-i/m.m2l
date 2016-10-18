@@ -24,8 +24,6 @@ else {
 		$msg= "Mot de passe mis à jour !";
 	}
 	include_once ('vues/VueChangerDeMdp.php');
-	
-	
 }
 
 
