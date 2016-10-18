@@ -43,6 +43,9 @@ class Salle
 	public function getAreaName()	{return $this->AreaName;}
 	public function setAreaName($unAreaName) {$this->AreaName = $unAreaName;}
 
+	
+	
+
 	// ------------------------------------------------------------------------------------------------------
 	// -------------------------------------- Méthodes d'instances ------------------------------------------
 	// ------------------------------------------------------------------------------------------------------
@@ -54,7 +57,7 @@ class Salle
 		$msg .= 'Capacity : ' . $this->getCapacity() . '<br>';
 		$msg .= 'Area Name : ' . $this->getAreaName() . '<br>';
 		$msg .= '<br>';
-
+ 
 		return $msg;
 	}
 

@@ -3,7 +3,7 @@
 // fichier : modele/Outils.class.php
 // Rôle : boite à outils de fonctions courantes proposées sous forme de méthodes statiques
 // Création : 30/6/2016 par JM CARTRON
-// Mise à jour : 4/9/2016 par JM CARTRON
+// Mise à jour : 5/9/2016 par JM CARTRON
 
 // liste des méthodes statiques de cette classe (dans l'ordre alphabétique) :
 
