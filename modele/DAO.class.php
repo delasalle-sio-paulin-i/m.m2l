@@ -433,6 +433,8 @@ class DAO
 	//Envoyer mdp
 	
 	public function envoyerMdp($mail){
+		$dao = new DAO();
+		
 		$chaine = 'azertyuiopqsdfghjklmwxcvbn123456789';
 		$nb_car= 8;
 		$nb_lettres = strlen($chaine) - 1;
@@ -452,7 +454,7 @@ class DAO
 		// exécution de la requete
 		$id = $req->execute();
 		
-		modifierMdpUser($id, $mdp);
+		$dao->modifierMdpUser($id, $mdp);
 		$subject= 'Votre nouveau mot de passe';
 		$msg='Bonjour, voici votre nouveau mot de passe : '.$mdp;
 		try{

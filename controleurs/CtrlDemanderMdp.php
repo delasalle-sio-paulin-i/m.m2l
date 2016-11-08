@@ -1,7 +1,8 @@
 <?php
 include_once ('modele/DAO.class.php');
 $dao = new DAO();
-$msg="";
+$msg="Données incomplètes ou incorrectes !";
+
 if(!empty($_POST["idUser"])){
 	if($dao->existeUtilisateur($_POST["idUser"])==false){
 		$msg="Nom d'utilisateur inexistant !";
@@ -13,7 +14,7 @@ if(!empty($_POST["idUser"])){
 
 	}
 }else{
-	$msg="Données incomplètes ou incorrectes !";
+	$msg="";
 }
 
 include_once ('vues/VueDemanderMdp.php');
