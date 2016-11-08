@@ -20,21 +20,31 @@ if ($_SESSION['niveauUtilisateur'] != 'administrateur') {
 			}
 			else {
 				if (!$dao->getUtilisateur($nomUser)){
-					$message = "Suppression impossible, l'utilisateur n'existe pas !";
+					$message = "Nom d'utilisateur inexistant !";
 				}
-					else { $dao->getLesReservations($nomUser);
+				else { $dao->getLesReservations($nomUser);
 						if ($lesReservations >= 0) {
 							$message = "Suppression impossible, l'utilisateur à déjà passé des reéservations.";
 							$typeMessage = 'avertissement';
 							$themeFooter = $themeNormal;
 							include_once ('vues/VueAnnulerReservation.php');
-						}
-						else {
+						}else {
 							if (!$dao->supprimerUtilisateur) {
-								$message = "Suppression impossible !!";
+								$message = "Problème lors de la suppression de l'utilisateur !";
 								$typeMessage = 'avertissement';
 								$themeFooter = $themeNormal;
 								include_once ('vues/VueAnnulerReservation.php');
+							}else{
+								try{
+									$user=$dao->getUtilisateur($nomUser);
+									$mail=$user->getEmail();
+									mail($mail, $msg, $sujet);
+									$sujet="Suppression de votre compte";
+									$msg="Votre compte a été supprimé";
+									$message="Suppression effectuée. <br> Un mail va être envoyé à l'utilisateur !";
+								}catch(Exception $ex){
+									$message="Suppression effectuée.<br>L'envoi du mail de confirmation a rencontré un problème.";
+								}
 							}
 							// Plus qu'a envoyer un mail à l'utilisateur et compléter la vue.
 							
@@ -42,6 +52,8 @@ if ($_SESSION['niveauUtilisateur'] != 'administrateur') {
 					}
 			
 			}
+			include_once ('vues/VueConfirmerReservation.php');
+				
 	}
 
 	

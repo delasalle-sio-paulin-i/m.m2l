@@ -25,6 +25,7 @@
 					<li><a href="index.php?action=ConsulterReservations" data-transition="<?php echo $transition; ?>">Consulter mes réservations</a></li>
 					<li><a href="index.php?action=ConfirmerReservation" data-transition="<?php echo $transition; ?>">Confirmer une réservation</a></li>
 					<li><a href="index.php?action=AnnulerReservation" data-transition="<?php echo $transition; ?>">Annuler une réservation</a></li>
+					<li><a href="index.php?action=DemanderMdp" data-transition="<?php echo $transition; ?>">Demander nouveau mot de passe</a></li>
 					<li><a href="index.php?action=ChangerDeMdp" data-ajax="false" data-transition="<?php echo $transition; ?>">Modifier mon mot de passe</a></li>
 					<?php if ( $niveauUtilisateur == "administrateur" ) {
 						// le menu administrateur possède 2 options supplémentaires ?>

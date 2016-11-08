@@ -455,7 +455,15 @@ class DAO
 		modifierMdpUser($id, $mdp);
 		$subject= 'Votre nouveau mot de passe';
 		$msg='Bonjour, voici votre nouveau mot de passe : '.$mdp;
-		mail($mail, $subject, $msg);
+		try{
+			mail($mail, $subject, $msg);
+			$res="Vous allez recevoir un mail <br> avec votre nouveau mot de passe..";
+		}
+		catch(Exception $ex){
+			
+			$res="Echec lors de l'envoi du mail";
+		}
+		return $res;
 		
 	}
 	
