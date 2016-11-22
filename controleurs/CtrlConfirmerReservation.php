@@ -15,7 +15,7 @@ if(!empty($_POST["idRes"])){
 		$msg="Cette reservation est deja passée !";
 	}else {
 		$dao->confirmerReservation($_POST["idRes"]);
-		$utilisateur=$dao->getUtilisateur($_POST["idRes"]);
+		$utilisateur=$dao->getUtilisateur($_SESSION['nom']);
 		$mail=$utilisateur->getEmail();
 		
 		$subject= 'Confirmation reservation';
@@ -30,9 +30,11 @@ if(!empty($_POST["idRes"])){
 			return $msg;		
 		}
 		
+	}	
+}else{
+		$msg="Données incomplètes ou incorrectes !";
 	}
-	
-}
+
 include_once ('vues/VueConfirmerReservation.php');
 
 
