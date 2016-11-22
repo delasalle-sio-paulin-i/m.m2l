@@ -51,7 +51,17 @@ else
 		if($dao->existeReservation($numRes)){
 			if($dao->estLeCreateur($nom, $numRes)){
 				$uneReservation=$dao->getReservation($numRes);
-				
+				$time=$uneReservation->getStart_time();
+				if($time>time()){
+					if($uneReservation->getStatus()==0){
+						$msg="Erreur : cette réservation est déjà confirmée.";
+					}else{
+						$dao->confirmerReservation($numRes);
+						$msg="Enregistrement effectué ; vous allez recevoir un mail de confirmation.";
+					}
+				}else{
+					$msg="Erreur : cette réservation est déjà passée.";
+				}
 			}else{
 				$msg="Erreur : vous n'êtes pas l'auteur de cette réservation";
 			}		

@@ -30,8 +30,9 @@ if ( $nom == "" && $mdp == "" )
 	if ( empty ($_POST ["mdp"]) == true)  $mdp = "";  else   $mdp = $_POST ["mdp"];
 }
 
-// initialisation du nombre de réservations
+// initialisation du nombre de salles
 $lesSalles = array();
+$nbReponses = 0;
 
 // Contrôle de la présence des paramètres
 if ( $nom == "" || $mdp == "" )
@@ -46,8 +47,10 @@ else
 		$msg = "Erreur : authentification incorrecte.";
 	else 
 	{
-		// récupération des réservations à venir créées par l'utilisateur
+		// récupération des salles disponibles
 		$lesSalles = $dao->getLesSalles();
+		$nbReponses = sizeof($lesReservations);
+		$msg = "il y a  " . $nbReponses . " salles disponibles(s).";
 	}
 	// ferme la connexion à MySQL
 	unset($dao);
