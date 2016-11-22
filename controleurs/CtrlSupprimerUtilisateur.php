@@ -22,6 +22,8 @@ if ($_SESSION['niveauUtilisateur'] != 'administrateur') {
 			$message = "Suppression impossible, données incorrectes ou incompletes.";
 			$typeMessage = 'avertissement';
 			$themeFooter = $themeNormal;
+			
+			include_once ('vues/VueSupprimerUtilisateur.php');
 			}
 			else {
 				if (!$dao->getUtilisateur($_POST ["txtName"])){
@@ -32,13 +34,16 @@ if ($_SESSION['niveauUtilisateur'] != 'administrateur') {
 							$message = "Suppression impossible, l'utilisateur à déjà passé des reéservations.";
 							$typeMessage = 'avertissement';
 							$themeFooter = $themeNormal;
+
 						}else {
 							$user=$dao->getUtilisateur($_POST ["txtName"]);
 							$mail=$user->getEmail();
 							if ($dao->supprimerUtilisateur($_POST ["txtName"])==false) {
 								$message = "Problème lors de la suppression de l'utilisateur !";
+
 								$typeMessage = 'avertissement';
 								$themeFooter = $themeNormal;
+
 							}else{
 								try{
 									$sujet="Suppression de votre compte";
@@ -48,6 +53,7 @@ if ($_SESSION['niveauUtilisateur'] != 'administrateur') {
 								}catch(Exception $ex){
 									$message="Suppression effectuée.<br>L'envoi du mail de confirmation a rencontré un problème.";
 								}
+
 							}
 							
 						}
