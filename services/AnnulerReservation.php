@@ -101,26 +101,6 @@ function creerFluxXML($msg, $lesSalles)
 	$elt_donnees = $doc->createElement('donnees');
 	$elt_data->appendChild($elt_donnees);
 	
-	// traitement des réservations
-	if (sizeof($lesSalles) > 0) {
-		foreach ($lesSalles as $uneSalle)
-		{
-			// crée un élément vide 'Salle'
-			$elt_salle = $doc->createElement('salle');
-			// place l'élément 'salle' dans l'élément 'donnees'
-			$elt_donnees->appendChild($elt_salle);
-		
-			// crée les éléments enfants de l'élément 'salle'
-			$elt_id         = $doc->createElement('id', $uneSalle->getId());
-			$elt_salle->appendChild($elt_id);
-			$elt_room_name  = $doc->createElement('room_name', $uneSalle->getRoom_name());
-			$elt_salle->appendChild($elt_room_name);
-			$elt_capacity = $doc->createElement('capacity', $uneSalle->getCapacity());
-			$elt_salle->appendChild($elt_capacity);
-			$elt_AreaName  = $doc->createElement('AreaName', $uneSalle->getAreaName());
-			$elt_salle->appendChild($elt_AreaName);
-		}
-	}
 	
 	// Mise en forme finale
 	$doc->formatOutput = true;
