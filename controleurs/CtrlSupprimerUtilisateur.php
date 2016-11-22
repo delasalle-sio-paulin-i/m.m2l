@@ -16,7 +16,7 @@ if ($_SESSION['niveauUtilisateur'] != 'administrateur') {
 			$message = "Suppression impossible, données incorrectes ou incompletes.";
 			$typeMessage = 'avertissement';
 			$themeFooter = $themeNormal;
-			include_once ('vues/VueAnnulerReservation.php');
+			include_once ('vues/VueSupprimerUtilisateur.php');
 			}
 			else {
 				if (!$dao->getUtilisateur($nomUser)){
@@ -27,14 +27,14 @@ if ($_SESSION['niveauUtilisateur'] != 'administrateur') {
 							$message = "Suppression impossible, l'utilisateur à déjà passé des reéservations.";
 							$typeMessage = 'avertissement';
 							$themeFooter = $themeNormal;
-							include_once ('vues/VueAnnulerReservation.php');
+							include_once ('vues/VueSupprimerUtilisateur.php');
 						}
 						else {
 							if (!$dao->supprimerUtilisateur) {
 								$message = "Suppression impossible !!";
 								$typeMessage = 'avertissement';
 								$themeFooter = $themeNormal;
-								include_once ('vues/VueAnnulerReservation.php');
+								include_once ('vues/VueSupprimerUtilisateur.php');
 							}
 							// Plus qu'a envoyer un mail à l'utilisateur et compléter la vue.
 							
