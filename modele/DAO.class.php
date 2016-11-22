@@ -421,7 +421,7 @@ class DAO
 	// Confirmer reservation
 	
 	public function confirmerReservation($idReservation){
-		$txt_req = "Update mrbs_entry Set status = '1' Where id=:idRes";
+		$txt_req = "Update mrbs_entry Set status = '0' Where id=:idRes";
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
 		$req->bindValue("idRes", $idReservation, PDO::PARAM_STR);
@@ -433,6 +433,8 @@ class DAO
 	//Envoyer mdp
 	
 	public function envoyerMdp($mail){
+		$dao = new DAO();
+		
 		$chaine = 'azertyuiopqsdfghjklmwxcvbn123456789';
 		$nb_car= 8;
 		$nb_lettres = strlen($chaine) - 1;
@@ -452,22 +454,31 @@ class DAO
 		// exécution de la requete
 		$id = $req->execute();
 		
-		modifierMdpUser($id, $mdp);
+		$dao->modifierMdpUser($id, $mdp);
 		$subject= 'Votre nouveau mot de passe';
 		$msg='Bonjour, voici votre nouveau mot de passe : '.$mdp;
-		mail($mail, $subject, $msg);
+		try{
+			mail($mail, $subject, $msg);
+			$res="Vous allez recevoir un mail <br> avec votre nouveau mot de passe..";
+		}
+		catch(Exception $ex){
+			
+			$res="Echec lors de l'envoi du mail";
+		}
+		return $res;
 		
 	}
 	
-	public function modifierMdpUser($id, $mdp){
+	public function modifierMdpUser($nom, $mdp){
 		$mdp=md5($mdp);
-		$txt_req = "Update From mrbs_user Set password=:mdp Where id=:id  ";
+		$txt_req = "Update mrbs_users Set password=:mdp Where name=:nom  ";
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
 		$req->bindValue("mdp", utf8_decode($mdp), PDO::PARAM_STR);
-		$req->bindValue("id", utf8_decode($id), PDO::PARAM_STR);
+		$req->bindValue("nom", utf8_decode($nom), PDO::PARAM_STR);
 		// exécution de la requete
-		$id = $req->execute();
+		$ok=$req->execute();
+		return $ok;
 	}
 	
 
@@ -498,23 +509,24 @@ class DAO
 		// fourniture de la réponse
 		if ($nbReponses == 0)
 			return "0";
-			else
-				return "1";
+		else
+			return "1";
 	
 	}
 	
 
 	public function existeReservation($idRes){
-		$txt_req = "Select * From mrbs_entry Where id:=idRes  ";
+		$txt_req = "Select count(*) From mrbs_entry Where id=:idRes  ";
 		$req = $this->cnx->prepare($txt_req);
 		// liaison de la requête et de ses paramètres
 		$req->bindValue("idRes", utf8_decode($idRes), PDO::PARAM_STR);
 		// exécution de la requete
-		$res = $req->execute();
-		if(empty($res)){
-			return FALSE;
+		$req->execute();
+		$res = $req->fetchColumn(0);
+		if($res==0){
+			return false;
 		}else{
-			return TRUE;
+			return true;
 		}
 	}
 	
@@ -531,7 +543,7 @@ class DAO
 		$lesSalles=array();
 		
 		while ($uneLigne)
-		{	// création d'un objet Reservation
+		{	// création d'un objet salle
 			$unId = utf8_encode($uneLigne->id);
 			$unRoomName = utf8_encode($uneLigne->room_name);
 			$uneCapacite = utf8_encode($uneLigne->capacity);
@@ -547,6 +559,25 @@ class DAO
 		return $lesSalles;
 	}
 
+	public function estLeCreateur($nomUser,$idReservation)
+		{	// préparation de la requete de recherche
+		$txt_req = "Select count(*) from mrbs_entry where create_by = :nomUser AND id = :idReservation";
+		$req = $this->cnx->prepare($txt_req);
+		// liaison de la requête et de ses paramètres
+		$req->bindValue("nomUser", $nomUser, PDO::PARAM_STR);
+		$req->bindValue("idReservation", $idReservation, PDO::PARAM_STR);
+		// exécution de la requete
+		$req->execute();
+		$res = $req->fetchColumn(0);
+		// libère les ressources du jeu de données
+		$req->closeCursor();
+		
+		// fourniture de la réponse
+		if ($res == 0)
+			return false;
+		else
+			return true;
+		}
 
 } // fin de la classe DAO
 

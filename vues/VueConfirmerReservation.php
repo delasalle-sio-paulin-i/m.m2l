@@ -13,7 +13,7 @@
 	</head>
 	 
 	<body>
-	<?php if($message!=""){?>
+	<?php if($msg!=""){?>
 		<div data-role="dialog" id="affichage_message" data-close-btn="none">
 			<div data-role="header" data-theme="a">
 				<h3>Information...</h3>
@@ -23,11 +23,11 @@
 				<p style="text-align: center;">
 					<img src="images/information.png" class="image" />
 				</p>
-				<p style="text-align: center;"><?php echo $message; ?></p>
+				<p style="text-align: center;"><?php echo $msg; ?></p>
 			</div>
-			<?php $message=""; ?>
+			<?php $msg=""; ?>
 			<div data-role="footer" class="ui-bar" data-theme="a">
-				<a href="index.php?action=SupprimerUtilisateur" data-transition="flip">Fermer</a>
+				<a href="index.php?action=ConfirmerReservation" data-transition="flip">Fermer</a>
 			</div>
 		</div>
 		<?php  }?>
@@ -37,10 +37,11 @@
 				<a href="index.php?action=Menu" data-transition="<?php echo $transition; ?>">Retour menu</a>
 			</div>
 			<div data-role="content">
-				<h4 style="text-align: center; margin-top: 0px; margin-bottom: 0px;">Supprimer utilisateur</h4>
-				<form name="form1" id="form1" action="index.php?action=SupprimerUtilisateur" data-ajax="false" method="post" data-transition="<?php echo $transition; ?>">
+				<h4 style="text-align: center; margin-top: 0px; margin-bottom: 0px;">Confirmer mes réservations</h4>
+				<form name="form1" id="form1" action="index.php?action=ConfirmerReservation" data-ajax="false" method="post" data-transition="<?php echo $transition; ?>">
 					<div data-role="fieldcontain" class="ui-hide-label">
-						<input type="text" name="txtName" id="txtName" data-mini="true" required placeholder="Supprimer utilisateur">
+						<label for="mdp1">Numero de reservation :</label>
+						<input type="text" name="idRes" id="idRes" data-mini="true" required placeholder="Numero de reservation">
 					</div>
 					<div data-role="fieldcontain" style="margin-top: 0px; margin-bottom: 0px;">
 						<p style="margin-top: 0px; margin-bottom: 0px;">
