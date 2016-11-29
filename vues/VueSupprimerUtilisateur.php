@@ -1,21 +1,26 @@
+<?php
+	// Projet Réservations M2L - version web mobile
+	// fichier : vues/VueCreerUtilisateur.php
+	// Rôle : visualiser la demande de création d'un nouvel utilisateur
+	// cette vue est appelée par le contôleur controleurs/CtrlCreerUtilisateur.php
+	// Création : 12/10/2015 par JM CARTRON
+	// Mise à jour : 2/6/2016 par JM CARTRON
+?>
 <!doctype html>
 <html>
 	<head>
 		<?php include_once ('vues/head.php'); ?>
+		
+		<script>
+			// associe une fonction à l'événement pageinit
+			$(document).bind('pageinit', function() {
+				<?php if ($typeMessage != '') { ?>
+					// affiche la boîte de dialogue 'affichage_message'
+					$.mobile.changePage('#affichage_message', {transition: "<?php echo $transition; ?>"});
+				<?php } ?>
+			} );
+		</script>
 	</head>
-
-<body>
-		<div data-role="page">
-			<div data-role="header" data-theme="<?php echo $themeNormal; ?>">
-				<h4>M2L-GRR</h4>
-				<a href="index.php?action=Menu" data-transition="<?php echo $transition; ?>">Retour menu</a>
-			</div>
-			<div data-role="content">
-				<h4 style="text-align: center; margin-top: 0px; margin-bottom: 0px;">Consulter mes réservations</h4>
-				<p style="text-align: center;"><?php echo $message; ?></p>
-				<ul data-role="listview" style="margin-top: 5px;">
-				</ul>
-				
 <?php 				
 if ( $niveauUtilisateur == "administrateur" ) 
 			{
