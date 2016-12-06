@@ -76,7 +76,7 @@ else
 					else 
 					{
 						$dao->supprimerUtilisateur($nomUser);
-						mail($mail, 'Suppression de votre compte', 'Votre compte a été supprimé'))	
+						mail($mail, 'Suppression de votre compte', 'Votre compte a été supprimé');
 					}
 				}
 			}
