@@ -1,42 +1,19 @@
 <?php
 	// Projet Réservations M2L - version web mobile
-
-	// fichier : vues/VueCreerUtilisateur.php
-	// Rôle : visualiser la demande de création d'un nouvel utilisateur
-	// cette vue est appelée par le contôleur controleurs/CtrlCreerUtilisateur.php
-	// Création : 12/10/2015 par JM CARTRON
-	// Mise à jour : 2/6/2016 par JM CARTRON
-
 	// fichier : vues/VueConsulterReservations.php
 	// Rôle : visualiser la liste des réservations à venir d'un utilisateur
 	// cette vue est appelée par le contôleur controleurs/CtrlConsulterReservations.php
 	// Création : 12/10/2015 par JM CARTRON
 	// Mise à jour : 31/5/2016 par JM CARTRON
-
 ?>
 <!doctype html>
 <html>
 	<head>
 		<?php include_once ('vues/head.php'); ?>
-		
-		<script>
-			// associe une fonction à l'événement pageinit
-			$(document).bind('pageinit', function() {
-				<?php if ($typeMessage != '') { ?>
-					// affiche la boîte de dialogue 'affichage_message'
-					$.mobile.changePage('#affichage_message', {transition: "<?php echo $transition; ?>"});
-				<?php } ?>
-			} );
-		</script>
 	</head>
-
-<?php 				
-if ( $niveauUtilisateur == "administrateur" ) 
-			{
-			
-	 ?>
+	 
 	<body>
-	<?php if($message!=""){?>
+	<?php if($msg!=""){?>
 		<div data-role="dialog" id="affichage_message" data-close-btn="none">
 			<div data-role="header" data-theme="a">
 				<h3>Information...</h3>
@@ -46,11 +23,11 @@ if ( $niveauUtilisateur == "administrateur" )
 				<p style="text-align: center;">
 					<img src="images/information.png" class="image" />
 				</p>
-				<p style="text-align: center;"><?php echo $message; ?></p>
+				<p style="text-align: center;"><?php echo $msg; ?></p>
 			</div>
-			<?php $message=""; ?>
+			<?php $msg=""; ?>
 			<div data-role="footer" class="ui-bar" data-theme="a">
-				<a href="index.php?action=SupprimerUtilisateur" data-transition="flip">Fermer</a>
+				<a href="index.php?action=ConfirmerReservation" data-transition="flip">Fermer</a>
 			</div>
 		</div>
 		<?php  }?>
@@ -60,10 +37,10 @@ if ( $niveauUtilisateur == "administrateur" )
 				<a href="index.php?action=Menu" data-transition="<?php echo $transition; ?>">Retour menu</a>
 			</div>
 			<div data-role="content">
-				<h4 style="text-align: center; margin-top: 0px; margin-bottom: 0px;">Supprimer utilisateur</h4>
-				<form name="form1" id="form1" action="index.php?action=SupprimerUtilisateur" data-ajax="false" method="post" data-transition="<?php echo $transition; ?>">
+				<h4 style="text-align: center; margin-top: 0px; margin-bottom: 0px;">Demander un nouveau mot de passe</h4>
+				<form name="form1" id="form1" action="index.php?action=DemanderMdp" data-ajax="false" method="post" data-transition="<?php echo $transition; ?>">
 					<div data-role="fieldcontain" class="ui-hide-label">
-						<input type="text" name="txtName" id="txtName" data-mini="true" required placeholder="Supprimer utilisateur">
+						<input type="text" name="idUser" id="idUser" data-mini="true" required placeholder="Entrez votre nom">
 					</div>
 					<div data-role="fieldcontain" style="margin-top: 0px; margin-bottom: 0px;">
 						<p style="margin-top: 0px; margin-bottom: 0px;">
@@ -71,11 +48,10 @@ if ( $niveauUtilisateur == "administrateur" )
 						</p>
 					</div>
 				</form>
-
 				
 
 			</div>
-			<div data-role="footer" data-position="fixed" data-theme="<?php echo $themeNormal;}?>">
+			<div data-role="footer" data-position="fixed" data-theme="<?php echo $themeNormal;?>">
 				<h4>Suivi des réservations de salles<br>Maison des ligues de Lorraine (M2L)</h4>
 			</div>
 		</div>
