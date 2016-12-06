@@ -1,17 +1,40 @@
 <?php
 	// Projet Réservations M2L - version web mobile
+
+	// fichier : vues/VueCreerUtilisateur.php
+	// Rôle : visualiser la demande de création d'un nouvel utilisateur
+	// cette vue est appelée par le contôleur controleurs/CtrlCreerUtilisateur.php
+	// Création : 12/10/2015 par JM CARTRON
+	// Mise à jour : 2/6/2016 par JM CARTRON
+
 	// fichier : vues/VueConsulterReservations.php
 	// Rôle : visualiser la liste des réservations à venir d'un utilisateur
 	// cette vue est appelée par le contôleur controleurs/CtrlConsulterReservations.php
 	// Création : 12/10/2015 par JM CARTRON
 	// Mise à jour : 31/5/2016 par JM CARTRON
+
 ?>
 <!doctype html>
 <html>
 	<head>
 		<?php include_once ('vues/head.php'); ?>
+		
+		<script>
+			// associe une fonction à l'événement pageinit
+			$(document).bind('pageinit', function() {
+				<?php if ($typeMessage != '') { ?>
+					// affiche la boîte de dialogue 'affichage_message'
+					$.mobile.changePage('#affichage_message', {transition: "<?php echo $transition; ?>"});
+				<?php } ?>
+			} );
+		</script>
 	</head>
-	 
+
+<?php 				
+if ( $niveauUtilisateur == "administrateur" ) 
+			{
+			
+	 ?>
 	<body>
 	<?php if($message!=""){?>
 		<div data-role="dialog" id="affichage_message" data-close-btn="none">
@@ -48,10 +71,11 @@
 						</p>
 					</div>
 				</form>
+
 				
 
 			</div>
-			<div data-role="footer" data-position="fixed" data-theme="<?php echo $themeNormal;?>">
+			<div data-role="footer" data-position="fixed" data-theme="<?php echo $themeNormal;}?>">
 				<h4>Suivi des réservations de salles<br>Maison des ligues de Lorraine (M2L)</h4>
 			</div>
 		</div>

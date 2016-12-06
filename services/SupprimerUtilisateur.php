@@ -82,6 +82,7 @@ else
 						} catch (Exception $e) {
 							$message= "Suppression effectuée. L'envoi du mail à l'utilisateur a rencontré un problème !";
 						}	
+
 					}
 				}
 			}
