@@ -65,21 +65,20 @@ else
 					$msg = "Suppression impossible, l'utilisateur à déjà passé des reéservations.";
 					
 				}
-						else
-						{
-						$user=$dao->getUtilisateur($nomUser);
-						$mail=$user->getEmail();
-						if ($dao->supprimerUtilisateur($nomUser) == false)
-						{
-							$message = "Cet utilisateur à passer des reservations à venir !";
-						}
-							else 
-							{
-								$dao->supprimerUtilisateur($nomUser);
-							}
-					
-						}
-			
+				else
+				{
+					$user=$dao->getUtilisateur($nomUser);
+					$mail=$user->getEmail();
+					if ($dao->supprimerUtilisateur($nomUser) == false)
+					{
+						$message = "Cet utilisateur à passer des reservations à venir !";
+					}
+					else 
+					{
+						$dao->supprimerUtilisateur($nomUser);
+						mail($mail, 'Suppression de votre compte', 'Votre compte a été supprimé'))	
+					}
+				}
 			}
 	}
 	// ferme la connexion à MySQL
