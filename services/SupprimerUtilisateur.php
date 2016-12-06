@@ -71,16 +71,16 @@ else
 					$mail=$user->getEmail();
 					if ($dao->supprimerUtilisateur($nomUser) == false)
 					{
-						$message = "Problème lors de la suppression de l'utilisateur !";
+						$msg = "Problème lors de la suppression de l'utilisateur !";
 					}
 					else 
 					{
 						$dao->supprimerUtilisateur($nomUser);
 						try {
 							mail($mail, 'Suppression de votre compte', 'Votre compte a été supprimé');
-							$message="Suppression effectuée. Un mail va être envoyé à l'utilisateur !";
+							$msg="Suppression effectuée. Un mail va être envoyé à l'utilisateur !";
 						} catch (Exception $e) {
-							$message= "Suppression effectuée. L'envoi du mail à l'utilisateur a rencontré un problème !";
+							$msg= "Suppression effectuée. L'envoi du mail à l'utilisateur a rencontré un problème !";
 						}	
 
 					}
