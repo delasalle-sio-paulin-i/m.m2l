@@ -145,21 +145,6 @@ class DAO
 	 }
 	 */
 
-	// enregistre l'utilisateur dans la bdd
-	// modifié par Jim le 26/5/2016
-	public function creerUtilisateur($unUtilisateur)
-	{	// préparation de la requete
-		$txt_req = "insert into mrbs_users (level, name, password, email) values (:level, :name, :password, :email)";
-		$req = $this->cnx->prepare($txt_req);
-		// liaison de la requête et de ses paramètres
-		$req->bindValue("level", utf8_decode($unUtilisateur->getLevel()), PDO::PARAM_STR);
-		$req->bindValue("name", utf8_decode($unUtilisateur->getName()), PDO::PARAM_STR);
-		$req->bindValue("password", utf8_decode(md5($unUtilisateur->getPassword())), PDO::PARAM_STR);
-		$req->bindValue("email", utf8_decode($unUtilisateur->getEmail()), PDO::PARAM_STR);
-		// exécution de la requete
-		$ok = $req->execute();
-		return $ok;
-	}
 
 	// fournit true si l'utilisateur ($nomUser) existe, false sinon
 	// modifié par Jim le 5/5/2015
@@ -339,6 +324,22 @@ class DAO
 	}
 	
 
+	// enregistre l'utilisateur dans la bdd
+	// modifié par Jim le 26/5/2016
+	public function creerUtilisateur($unUtilisateur)
+	{	// préparation de la requete
+	$txt_req = "insert into mrbs_users (level, name, password, email) values (:level, :name, :password, :email)";
+	$req = $this->cnx->prepare($txt_req);
+	// liaison de la requête et de ses paramètres
+	$req->bindValue("level", utf8_decode($unUtilisateur->getLevel()), PDO::PARAM_STR);
+	$req->bindValue("name", utf8_decode($unUtilisateur->getName()), PDO::PARAM_STR);
+	$req->bindValue("password", utf8_decode(md5($unUtilisateur->getPassword())), PDO::PARAM_STR);
+	$req->bindValue("email", utf8_decode($unUtilisateur->getEmail()), PDO::PARAM_STR);
+	// exécution de la requete
+	$ok = $req->execute();
+	return $ok;
+	
+	}
 	
 	// Fonction qui va supprimer l'utilisateur
 	public function supprimerUtilisateur($name) {

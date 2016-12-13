@@ -8,10 +8,10 @@
 
 // Le service web doit être appelé avec 5 paramètres : nomAdmin, mdpAdmin, name, level, email
 // Les paramètres peuvent être passés par la méthode GET (pratique pour les tests, mais à éviter en exploitation) :
-//     http://<hébergeur>/CreerUtilisateur.php?nomAdmin=admin&mdpAdmin=admin&name=jim&level=1&email=jean.michel.cartron@gmail.com
+//     http://<hébergeur>/SupprimerUtilisateur.php?nomAdmin=admin&mdpAdmin=admin&name=jim
 
 // Les paramètres peuvent être passés par la méthode POST (à privilégier en exploitation pour la confidentialité des données) :
-//     http://<hébergeur>/CreerUtilisateur.php
+//     http://<hébergeur>/SupprimerUtilisateur.php
 
 // inclusion de la classe Outils
 include_once ('../modele/Outils.class.php');
@@ -22,17 +22,17 @@ include_once ('../modele/parametres.localhost.php');
 
 // Récupération des données transmises
 // la fonction $_GET récupère une donnée passée en paramètre dans l'URL par la méthode GET
-if ( empty ($_GET ["nom"]) == true)  $nom = "";  else   $nom = $_GET ["nom"];
-if ( empty ($_GET ["mdp"]) == true)  $mdp = "";  else   $mdp = $_GET ["mdp"];
-if ( empty ($_GET ["numRes"]) == true)  $numRes = "";  else   $mdp = $_GET ["numRes"];
+if ( empty ($_GET ["nomAdmin"]) == true)  $nomAdmin = "";  else   $nomAdmin = $_GET ["nomAdmin"];
+if ( empty ($_GET ["mdpAdmin"]) == true)  $mdpAdmin = "";  else   $mdpAdmin = $_GET ["mdpAdmin"];
+if ( empty ($_GET ["name"]) == true)  $name = "";  else   $name = $_GET ["name"];
 
 
 // si l'URL ne contient pas les données, on regarde si elles ont été envoyées par la méthode POST
 // la fonction $_POST récupère une donnée envoyées par la méthode POST
-if ( $nom == "" && $mdp == ""  && $numRes == "")
-{	if ( empty ($_POST ["nom"]) == true)  $nom = "";  else   $nom = $_POST ["nom"];
-if ( empty ($_POST ["mdp"]) == true)  $mdp = "";  else   $mdp = $_POST ["mdp"];
-if ( empty ($_POST ["numRes"]) == true)  $numRes = "";  else   $mdp = $_POST ["numRes"];
+if ( $nomAdmin == "" && $mdpAdmin == ""  && $name == "")
+{	if ( empty ($_POST ["nomAdmin"]) == true)  $nomAdmin = "";  else   $nomAdmin = $_POST ["nomAdmin"];
+	if ( empty ($_POST ["mdpAdmin"]) == true)  $mdpAdmin = "";  else   $mdpAdmin = $_POST ["mdp"];
+	if ( empty ($_POST ["name"]) == true)  $name = "";  else   $name = $_POST ["name"];
 }
 
 
@@ -40,7 +40,7 @@ if ( empty ($_POST ["numRes"]) == true)  $numRes = "";  else   $mdp = $_POST ["n
 
 
 // Contrôle de la présence des paramètres
-if ( $nom == "" || $mdp == "" || $numRes == "")
+if ( $nomAdmin == "" || $mdpAdmin == "" || $name == "")
 {	$msg = "Erreur : données incomplètes.";
 }
 else
@@ -48,35 +48,53 @@ else
 	include_once ('../modele/DAO.class.php');
 	$dao = new DAO();
 	
-	if ( !$dao->getNiveauUtilisateur($nom, $mdp) == 'administrateur' )
+	if ( !$dao->getNiveauUtilisateur($nomAdmin, $mdpAdmin) == 'administrateur' )
 		$msg = "Erreur : Authentification incorrecte.";
 	
 	else 
 	{
 		// récupération des réservations à venir créées par l'utilisateur
-		if(!$dao->getUtilisateur($nomUser))
+		if(!$dao->getUtilisateur($nomAdmin))
 		{
 			$msg = "Nom d'utilisateur inexistant !";
 		}
 		
 			else 
-			{ $lesReservations=$dao->getLesReservations($nomUser);
+			{ $lesReservations=$dao->getLesReservations($nomAdmin);
 				if (!empty($lesReservations)) {
-					$msg = "Suppression impossible, l'utilisateur à déjà passé des reéservations.";
+					$msg = "Suppression impossible, l'utilisateur a déjà passé des reéservations.";
 					
 				}
 						else
 						{
-						$user=$dao->getUtilisateur($nomUser);
+						$user=$dao->getUtilisateur($nomAdmin);
 						$mail=$user->getEmail();
-						if ($dao->supprimerUtilisateur($nomUser) == false)
+						if ($dao->supprimerUtilisateur($nomAdmin) == false)
 						{
-							$message = "Cet utilisateur à passer des reservations à venir !";
+							$message = "Cet utilisateur a passer des reservations à venir !";
 						}
 							else 
 							{
-								$dao->supprimerUtilisateur($nomUser);
-							}
+								/*$dao->supprimerUtilisateur($nomAdmin);
+								
+								// envoi d'un mail de confirmation de l'enregistrement
+								$sujet = "Suppression de votre compte dans le système de réservation de M2L";
+								$contenuMail = "L'administrateur du système de réservations de la M2L vient de vous créer un compte utilisateur.\n\n";
+								$contenuMail .= "Les données enregistrées sont :\n\n";
+								$contenuMail .= "Votre nom : " . $name . "\n";
+								$contenuMail .= "Votre mot de passe : " . $password . " (nous vous conseillons de le changer lors de la première connexion)\n";
+								$contenuMail .= "Votre niveau d'accès (0 : invité    1 : utilisateur    2 : administrateur) : " . $level . "\n";
+									
+								$ok = Outils::envoyerMail($email, $sujet, $contenuMail, $ADR_MAIL_EMETTEUR);
+								if ( ! $ok ) {
+									// l'envoi de mail a échoué */
+									$msg = "Suppression effectué ; l'envoi du mail à l'utilisateur a rencontré un problème.";
+								}
+								/*else {
+									// tout a bien fonctionné
+									$msg = "Suppression effectué ; un mail va être envoyé à l'utilisateur.";
+								}
+							}*/
 					
 						}
 			
@@ -102,7 +120,7 @@ function creerFluxXML($msg)
 	$doc->encoding = 'ISO-8859-1';
 	
 	// crée un commentaire et l'encode en ISO
-	$elt_commentaire = $doc->createComment('Service web CreerUtilisateur - BTS SIO - Lycée De La Salle - Rennes');
+	$elt_commentaire = $doc->createComment('Service web SupprimerUtilisateur - BTS SIO - Lycée De La Salle - Rennes');
 	// place ce commentaire à la racine du document XML
 	$doc->appendChild($elt_commentaire);
 		
