@@ -84,7 +84,11 @@ switch($action){
 		include_once ('controleurs/CtrlCreerUtilisateur.php'); break;
 	}
 	case 'SupprimerUtilisateur': {
-		include_once ('controleurs/CtrlSupprimerUtilisateur.php'); break;	
+
+		//include_once ('controleurs/CtrlSupprimerUtilisateur.php'); break;
+		include_once ('controleurs/CtrlSupprimerUtilisateur.php'); break;	// ligne provisoire
+
+	
 	}
 	default : {
 		// toute autre tentative est automatiquement redirigée vers le contrôleur d'authentification

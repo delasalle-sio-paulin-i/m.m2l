@@ -23,7 +23,7 @@ else {
 
 	// mise à jour de la table mrbs_entry_digicode (si besoin) pour créer les digicodes manquants
 		if (!$dao->existeReservation($idReservation)){
-			$message = "Annulation impossible, vous n'avez pas de réservation.";
+			$message = "Vous n'êtes pas l'auteur de cette réservation !";
 			$typeMessage = 'avertissement';
 			$themeFooter = $themeNormal;
 			include_once ('vues/VueAnnulerReservation.php');
@@ -34,7 +34,7 @@ else {
 			$laDateReservation = $laReservation->getEnd_time();
 			
 			if ($laDateReservation <= time()){
-				$message = "Annulation impossible, la réservation est passée.";
+				$message = "Cette réservation est déjà passée !";
 				$typeMessage = 'avertissement';
 				$themeFooter = $themeNormal;
 				include_once ('vues/VueAnnulerReservation.php');
@@ -52,7 +52,7 @@ else {
 					// Si la réservation existe et a été faite par l'utilisateur elle est annulée
 					$ok = $dao->annulerReservation($idReservation);
 			
-					if ($ok) {
+				if ($ok) {
 						$message = 'Réservation correctement annulée.';
 						$typeMessage = 'information';
 						$themeFooter = $themeNormal;

@@ -65,6 +65,7 @@ else
 					$msg = "Suppression impossible, l'utilisateur a déjà passé des reéservations.";
 					
 				}
+
 						else
 						{
 						$user=$dao->getUtilisateur($nomAdmin);
@@ -98,8 +99,14 @@ else
 					
 						}
 			
-			}
-	}
+
+		
+
+					}
+				}
+
+			
+	
 	// ferme la connexion à MySQL
 	unset($dao);
 }

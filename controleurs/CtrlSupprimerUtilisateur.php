@@ -1,4 +1,10 @@
 <?php
+
+include_once ('modele/DAO.class.php');
+$dao = new DAO();
+include_once ('vues/VueSupprimerUtilisateur.php');
+?>
+
 // Projet Réservations M2L - version web mobile
 // fichier : controleurs/CtrlCreerUtilisateur.php
 // Rôle : traiter la demande de création d'un nouvel utilisateur
